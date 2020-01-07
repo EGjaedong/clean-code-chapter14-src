@@ -1,6 +1,6 @@
 package com.company;
 
-import com.company.utilities.args.Args;
+import com.company.utilities.getopts.Args;
 
 public class Main {
 
