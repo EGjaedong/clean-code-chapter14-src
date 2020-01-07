@@ -6,7 +6,7 @@ public class Main {
 
     public static void main(String[] args) {
         try{
-            Args arg = new Args("l", args);
+            Args arg = new Args("l, p#, d*", args);
             boolean logging = arg.getBoolean('l');
         }catch (Exception e){
             e.printStackTrace();
