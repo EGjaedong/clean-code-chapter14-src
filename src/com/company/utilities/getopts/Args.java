@@ -8,7 +8,7 @@ public class Args {
     private String[] args;
     private boolean valid;
     private Set<Character> unexpectedArguments = new TreeSet<>();
-    private Map<Character, Boolean> booleanArgs = new HashMap<>();
+    private Map<Character, ArgumentMarshaler> booleanArgs = new HashMap<>();
     private Map<Character, String> stringArgs = new HashMap<>();
     private Set<Character> argsFount = new HashSet<>();
     private int currentArgument;
@@ -64,7 +64,7 @@ public class Args {
     }
 
     private void parseBooleanSchemaElement(char elementId) {
-        booleanArgs.put(elementId, false);
+        booleanArgs.put(elementId, new BooleanArgumentMarshaler());
     }
 
     private boolean isStringSchemaElement(String elementTail) {
@@ -129,7 +129,7 @@ public class Args {
     }
 
     private void setBooleanArg(char argChar, boolean value) {
-        booleanArgs.put(argChar, value);
+        booleanArgs.get(argChar).setBoolean(value);
     }
 
     private boolean isBoolean(char argChar) {
@@ -172,11 +172,8 @@ public class Args {
     }
 
     public boolean getBoolean(char arg) {
-        return falseIfNull(booleanArgs.get(arg));
-    }
-
-    private boolean falseIfNull(Boolean b) {
-        return b == null ? false : b;
+        ArgumentMarshaler am = booleanArgs.get(arg);
+        return am != null && am.getBoolean();
     }
 
     public String getString(char arg) {
@@ -193,5 +190,26 @@ public class Args {
 
     public boolean ifValid() {
         return valid;
+    }
+
+    private class ArgumentMarshaler {
+        private boolean booleanValue = false;
+
+        public void setBoolean(boolean value) {
+            booleanValue = value;
+        }
+
+        public boolean getBoolean() {
+            return booleanValue;
+        }
+    }
+
+    private class BooleanArgumentMarshaler extends ArgumentMarshaler {
+    }
+
+    private class StringArgumentMarshaler extends ArgumentMarshaler {
+    }
+
+    private class IntegerArgumentMarshaler extends ArgumentMarshaler {
     }
 }
