@@ -10,23 +10,25 @@ public class Args {
     private Set<Character> unexpectedArguments = new TreeSet<>();
     private Map<Character, ArgumentMarshaler> booleanArgs = new HashMap<>();
     private Map<Character, ArgumentMarshaler> stringArgs = new HashMap<>();
+    private Map<Character, ArgumentMarshaler> intArgs = new HashMap<>();
     private Set<Character> argsFount = new HashSet<>();
     private int currentArgument;
     private char errorArgument = '\0';
+    private String errorParameter = "";
 
     enum ErrorCode {
-        OK, MISSING_STRING
+        OK, MISSING_STRING, INVALID_INTEGER, MISSING_INTEGER
     }
 
     private ErrorCode errorCode = ErrorCode.OK;
 
-    public Args(String schema, String[] args) throws ParseException {
+    public Args(String schema, String[] args) throws ParseException, ArgsException {
         this.schema = schema;
         this.args = args;
         valid = parse();
     }
 
-    private boolean parse() throws ParseException {
+    private boolean parse() throws ParseException, ArgsException {
         if (schema.length() == 0 && args.length == 0)
             return true;
         parseSchema();
@@ -52,6 +54,8 @@ public class Args {
             parseBooleanSchemaElement(elementId);
         else if (isStringSchemaElement(elementTail))
             parseStringSchemaElement(elementId);
+        else if (isIntSchemaElement(elementTail))
+            parseIngSchemaElement(elementId);
     }
 
     private void validateSchemaElementId(char elementId) throws ParseException {
@@ -75,7 +79,15 @@ public class Args {
         stringArgs.put(elementId, new ArgumentMarshaler());
     }
 
-    private boolean parseArguments() {
+    private boolean isIntSchemaElement(String elementTail) {
+        return elementTail.equals("#");
+    }
+
+    private void parseIngSchemaElement(char elementId) {
+        intArgs.put(elementId, new ArgumentMarshaler());
+    }
+
+    private boolean parseArguments() throws ArgsException {
         for (currentArgument = 0; currentArgument < args.length; currentArgument++) {
             String arg = args[currentArgument];
             parseArgument(arg);
@@ -83,17 +95,17 @@ public class Args {
         return true;
     }
 
-    private void parseArgument(String arg) {
+    private void parseArgument(String arg) throws ArgsException {
         if (arg.startsWith("-"))
             parseElements(arg);
     }
 
-    private void parseElements(String arg) {
+    private void parseElements(String arg) throws ArgsException {
         for (int i = 1; i < arg.length(); i++)
             parseElement(arg.charAt(i));
     }
 
-    private void parseElement(char argChar) {
+    private void parseElement(char argChar) throws ArgsException {
         if (setArgument(argChar))
             argsFount.add(argChar);
         else {
@@ -102,12 +114,14 @@ public class Args {
         }
     }
 
-    private boolean setArgument(char argChar) {
+    private boolean setArgument(char argChar) throws ArgsException {
         Boolean set = true;
         if (isBoolean(argChar))
             setBooleanArg(argChar, true);
         else if (isString(argChar))
             setStringArg(argChar, "");
+        else if (isInt(argChar))
+            setIngArg(argChar, 0);
         else
             set = false;
         return set;
@@ -134,6 +148,30 @@ public class Args {
 
     private boolean isBoolean(char argChar) {
         return booleanArgs.containsKey(argChar);
+    }
+
+    private void setIngArg(char argChar, int i) throws ArgsException {
+        currentArgument++;
+        String parameter = null;
+        try {
+            parameter = args[currentArgument];
+            intArgs.get(argChar).setInteger(Integer.parseInt(parameter));
+        } catch (ArrayIndexOutOfBoundsException e) {
+            valid = false;
+            errorArgument = argChar;
+            errorCode = ErrorCode.MISSING_INTEGER;
+            throw new ArgsException();
+        } catch (NumberFormatException e) {
+            valid = false;
+            errorArgument = argChar;
+            errorParameter = parameter;
+            errorCode = ErrorCode.INVALID_INTEGER;
+            throw new ArgsException();
+        }
+    }
+
+    private boolean isInt(char argChar) {
+        return intArgs.containsKey(argChar);
     }
 
     public int cardinality() {
@@ -181,6 +219,11 @@ public class Args {
         return am == null ? "" : am.getString();
     }
 
+    public int getInt(char arg) {
+        ArgumentMarshaler am = intArgs.get(arg);
+        return am == null ? 0 : am.getInteger();
+    }
+
     private String blankIfNull(String s) {
         return s == null ? "" : s;
     }
@@ -196,6 +239,7 @@ public class Args {
     private class ArgumentMarshaler {
         private boolean booleanValue = false;
         private String stringValue;
+        private int integerValue;
 
         public void setBoolean(boolean value) {
             booleanValue = value;
@@ -211,6 +255,14 @@ public class Args {
 
         public String getString() {
             return stringValue == null ? "" : stringValue;
+        }
+
+        public void setInteger(int i) {
+            integerValue = i;
+        }
+
+        public int getInteger() {
+            return integerValue;
         }
     }
 
