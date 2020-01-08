@@ -55,7 +55,7 @@ public class Args {
         else if (isStringSchemaElement(elementTail))
             parseStringSchemaElement(elementId);
         else if (isIntSchemaElement(elementTail))
-            parseIngSchemaElement(elementId);
+            parseIntSchemaElement(elementId);
     }
 
     private void validateSchemaElementId(char elementId) throws ParseException {
@@ -76,15 +76,15 @@ public class Args {
     }
 
     private void parseStringSchemaElement(char elementId) {
-        stringArgs.put(elementId, new ArgumentMarshaler());
+        stringArgs.put(elementId, new StringArgumentMarshaler());
     }
 
     private boolean isIntSchemaElement(String elementTail) {
         return elementTail.equals("#");
     }
 
-    private void parseIngSchemaElement(char elementId) {
-        intArgs.put(elementId, new ArgumentMarshaler());
+    private void parseIntSchemaElement(char elementId) {
+        intArgs.put(elementId, new IntegerArgumentMarshaler());
     }
 
     private boolean parseArguments() throws ArgsException {
@@ -143,7 +143,7 @@ public class Args {
     }
 
     private void setBooleanArg(char argChar, boolean value) {
-        booleanArgs.get(argChar).setBoolean(value);
+        booleanArgs.get(argChar).set("true");
     }
 
     private boolean isBoolean(char argChar) {
@@ -211,7 +211,7 @@ public class Args {
 
     public boolean getBoolean(char arg) {
         ArgumentMarshaler am = booleanArgs.get(arg);
-        return am != null && am.getBoolean();
+        return am != null && (Boolean) am.get();
     }
 
     public String getString(char arg) {
@@ -236,18 +236,9 @@ public class Args {
         return valid;
     }
 
-    private class ArgumentMarshaler {
-        private boolean booleanValue = false;
+    private abstract class ArgumentMarshaler {
         private String stringValue;
         private int integerValue;
-
-        public void setBoolean(boolean value) {
-            booleanValue = value;
-        }
-
-        public boolean getBoolean() {
-            return booleanValue;
-        }
 
         public void setString(String s) {
             stringValue = s;
@@ -264,14 +255,40 @@ public class Args {
         public int getInteger() {
             return integerValue;
         }
+
+        public abstract void set(String s);
+
+        public abstract Object get();
     }
 
     private class BooleanArgumentMarshaler extends ArgumentMarshaler {
+        private boolean booleanValue = false;
+        public void set(String s) {
+            booleanValue = true;
+        }
+
+        public Object get() {
+            return booleanValue;
+        }
     }
 
     private class StringArgumentMarshaler extends ArgumentMarshaler {
+        public void set(String s) {
+
+        }
+
+        public Object get() {
+            return null;
+        }
     }
 
     private class IntegerArgumentMarshaler extends ArgumentMarshaler {
+        public void set(String s) {
+
+        }
+
+        public Object get() {
+            return null;
+        }
     }
 }
