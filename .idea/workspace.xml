@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e7ba70f1-4e81-4caa-9277-3c78e6710232" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/company/Main.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/company/utilities/getopts/Args.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/company/utilities/getopts/ArgsException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/com/company/utilities/getopts/ArgsTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/clean-code-chapter14-src.iml" beforeDir="false" afterPath="$PROJECT_DIR$/clean-code-chapter14-src.iml" afterDir="false" />
@@ -35,11 +32,40 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="Downloaded.Files.Path.Enabled" value="false" />
+    <property name="Repository.Attach.Annotations" value="false" />
+    <property name="Repository.Attach.JavaDocs" value="false" />
+    <property name="Repository.Attach.Sources" value="false" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
+    <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit5" />
+    <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5" value="" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="MavenSettings" />
+  </component>
+  <component name="RunManager">
+    <configuration name="ArgsTest.test1" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="clean-code-chapter14-src" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.company.utilities.getopts.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.company.utilities.getopts" />
+      <option name="MAIN_CLASS_NAME" value="com.company.utilities.getopts.ArgsTest" />
+      <option name="METHOD_NAME" value="test1" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.ArgsTest.test1" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="ServiceViewManager">
     <option name="viewStates">
@@ -64,10 +90,37 @@
       <option name="presentableId" value="Default" />
       <updated>1578638267667</updated>
       <workItem from="1578638903003" duration="65000" />
+      <workItem from="1578638978700" duration="253000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state width="1398" height="208" key="GridCell.Tab.0.bottom" timestamp="1578639158732">
+      <screen x="0" y="23" width="1440" height="809" />
+    </state>
+    <state width="1398" height="208" key="GridCell.Tab.0.bottom/0.23.1440.809@0.23.1440.809" timestamp="1578639158732" />
+    <state width="1398" height="208" key="GridCell.Tab.0.center" timestamp="1578639158731">
+      <screen x="0" y="23" width="1440" height="809" />
+    </state>
+    <state width="1398" height="208" key="GridCell.Tab.0.center/0.23.1440.809@0.23.1440.809" timestamp="1578639158731" />
+    <state width="1398" height="208" key="GridCell.Tab.0.left" timestamp="1578639158731">
+      <screen x="0" y="23" width="1440" height="809" />
+    </state>
+    <state width="1398" height="208" key="GridCell.Tab.0.left/0.23.1440.809@0.23.1440.809" timestamp="1578639158731" />
+    <state width="1398" height="208" key="GridCell.Tab.0.right" timestamp="1578639158732">
+      <screen x="0" y="23" width="1440" height="809" />
+    </state>
+    <state width="1398" height="208" key="GridCell.Tab.0.right/0.23.1440.809@0.23.1440.809" timestamp="1578639158732" />
+    <state x="424" y="328" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD" timestamp="1578639120008">
+      <screen x="0" y="23" width="1440" height="809" />
+    </state>
+    <state x="424" y="328" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD/0.23.1440.809@0.23.1440.809" timestamp="1578639120008" />
+    <state x="469" y="161" key="com.intellij.testIntegration.createTest.CreateTestDialog" timestamp="1578639134011">
+      <screen x="0" y="23" width="1440" height="809" />
+    </state>
+    <state x="469" y="161" key="com.intellij.testIntegration.createTest.CreateTestDialog/0.23.1440.809@0.23.1440.809" timestamp="1578639134011" />
   </component>
 </project>
