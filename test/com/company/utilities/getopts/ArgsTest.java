@@ -6,7 +6,35 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ArgsTest {
     @Test
-    void test1() {
-        assertTrue(true);
+    void testInvalidBoolean() throws Exception {
+        Args args = new Args("l", new String[]{"-l"});
+        assertTrue(args.isValid());
+        assertTrue(args.getBoolean('l'));
+        assertEquals(1, args.cardinality());
+    }
+
+    @Test
+    void testInvalidBoolean2() throws Exception {
+        Args args = new Args("l", new String[]{"-l"});
+        assertTrue(args.isValid());
+        assertFalse(args.getBoolean('d'));
+        assertEquals(1, args.cardinality());
+    }
+
+    @Test
+    void testInvalidString() throws Exception {
+        Args args = new Args("d*", new String[]{"-d", "qwqr"});
+        assertTrue(args.isValid());
+        assertEquals("qwqr", args.getString('d'));
+        assertEquals(1, args.cardinality());
+    }
+
+    @Test
+    void testInvalidBooleanAndString() throws Exception {
+        Args args = new Args("l,d*", new String[]{"-l", "-d", "qwqr"});
+        assertTrue(args.isValid());
+        assertTrue(args.getBoolean('l'));
+        assertEquals("qwqr", args.getString('d'));
+        assertEquals(2, args.cardinality());
     }
 }
