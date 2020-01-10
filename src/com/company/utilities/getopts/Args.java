@@ -1,7 +1,5 @@
 package com.company.utilities.getopts;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
 import java.text.ParseException;
 import java.util.*;
 
@@ -230,7 +228,7 @@ public class Args {
         ArgumentMarshaler am = marshalers.get(arg);
         try {
             return am == null ? 0 : (Integer) am.get();
-        }catch (Exception e){
+        } catch (Exception e) {
             return 0;
         }
     }
