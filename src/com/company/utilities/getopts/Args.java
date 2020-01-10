@@ -56,11 +56,11 @@ public class Args {
         String elementTail = element.substring(1);
         validateSchemaElementId(elementId);
         if (isBooleanSchemaElement(elementTail))
-            parseBooleanSchemaElement(elementId);
+            marshalers.put(elementId, new BooleanArgumentMarshaler());
         else if (isStringSchemaElement(elementTail))
-            parseStringSchemaElement(elementId);
+            marshalers.put(elementId, new StringArgumentMarshaler());
         else if (isIntSchemaElement(elementTail))
-            parseIntSchemaElement(elementId);
+            marshalers.put(elementId, new IntegerArgumentMarshaler());
     }
 
     private void validateSchemaElementId(char elementId) throws ParseException {
@@ -72,24 +72,12 @@ public class Args {
         return elementTail.length() == 0;
     }
 
-    private void parseBooleanSchemaElement(char elementId) {
-        marshalers.put(elementId, new BooleanArgumentMarshaler());
-    }
-
     private boolean isStringSchemaElement(String elementTail) {
         return elementTail.equals("*");
     }
 
-    private void parseStringSchemaElement(char elementId) {
-        marshalers.put(elementId, new StringArgumentMarshaler());
-    }
-
     private boolean isIntSchemaElement(String elementTail) {
         return elementTail.equals("#");
-    }
-
-    private void parseIntSchemaElement(char elementId) {
-        marshalers.put(elementId, new IntegerArgumentMarshaler());
     }
 
     private boolean parseArguments() throws ArgsException {
