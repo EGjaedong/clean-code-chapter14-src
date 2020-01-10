@@ -11,6 +11,7 @@ public class Args {
     private Map<Character, ArgumentMarshaler> booleanArgs = new HashMap<>();
     private Map<Character, ArgumentMarshaler> stringArgs = new HashMap<>();
     private Map<Character, ArgumentMarshaler> intArgs = new HashMap<>();
+    private Map<Character, ArgumentMarshaler> marshalers = new HashMap<>();
     private Set<Character> argsFount = new HashSet<>();
     private int currentArgument;
     private char errorArgument = '\0';
@@ -68,7 +69,9 @@ public class Args {
     }
 
     private void parseBooleanSchemaElement(char elementId) {
-        booleanArgs.put(elementId, new BooleanArgumentMarshaler());
+        ArgumentMarshaler m = new BooleanArgumentMarshaler();
+        booleanArgs.put(elementId, m);
+        marshalers.put(elementId, m);
     }
 
     private boolean isStringSchemaElement(String elementTail) {
@@ -76,7 +79,9 @@ public class Args {
     }
 
     private void parseStringSchemaElement(char elementId) {
-        stringArgs.put(elementId, new StringArgumentMarshaler());
+        ArgumentMarshaler m = new StringArgumentMarshaler();
+        stringArgs.put(elementId, m);
+        marshalers.put(elementId, m);
     }
 
     private boolean isIntSchemaElement(String elementTail) {
@@ -84,7 +89,9 @@ public class Args {
     }
 
     private void parseIntSchemaElement(char elementId) {
-        intArgs.put(elementId, new IntegerArgumentMarshaler());
+        ArgumentMarshaler m = new IntegerArgumentMarshaler();
+        intArgs.put(elementId, m);
+        marshalers.put(elementId, m);
     }
 
     private boolean parseArguments() throws ArgsException {
@@ -115,16 +122,16 @@ public class Args {
     }
 
     private boolean setArgument(char argChar) throws ArgsException {
-        Boolean set = true;
-        if (isBoolean(argChar))
+        ArgumentMarshaler m = marshalers.get(argChar);
+        if (isBoolean(m))
             setBooleanArg(argChar, true);
-        else if (isString(argChar))
+        else if (isString(m))
             setStringArg(argChar, "");
-        else if (isInt(argChar))
+        else if (isInt(m))
             setIngArg(argChar, 0);
         else
-            set = false;
-        return set;
+            return false;
+        return true;
     }
 
     private void setStringArg(char argChar, String s) {
@@ -139,8 +146,8 @@ public class Args {
         }
     }
 
-    private boolean isString(char argChar) {
-        return stringArgs.containsKey(argChar);
+    private boolean isString(ArgumentMarshaler m) {
+        return m instanceof StringArgumentMarshaler;
     }
 
     private void setBooleanArg(char argChar, boolean value) {
@@ -150,8 +157,8 @@ public class Args {
         }
     }
 
-    private boolean isBoolean(char argChar) {
-        return booleanArgs.containsKey(argChar);
+    private boolean isBoolean(ArgumentMarshaler m) {
+        return m instanceof BooleanArgumentMarshaler;
     }
 
     private void setIngArg(char argChar, int i) throws ArgsException {
@@ -174,8 +181,8 @@ public class Args {
         }
     }
 
-    private boolean isInt(char argChar) {
-        return intArgs.containsKey(argChar);
+    private boolean isInt(ArgumentMarshaler m) {
+        return m instanceof IntegerArgumentMarshaler;
     }
 
     public int cardinality() {
