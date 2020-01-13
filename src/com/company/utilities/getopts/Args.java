@@ -222,10 +222,6 @@ public class Args {
         }
     }
 
-    private String blankIfNull(String s) {
-        return s == null ? "" : s;
-    }
-
     public boolean has(char arg) {
         return argsFount.contains(arg);
     }
