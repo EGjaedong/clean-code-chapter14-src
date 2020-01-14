@@ -5,13 +5,13 @@ import java.util.*;
 
 public class Args {
     private String schema;
-    private boolean valid;
+    private boolean valid = true;
     private Set<Character> unexpectedArguments = new TreeSet<>();
     private Map<Character, ArgumentMarshaler> marshalers = new HashMap<>();
     private Set<Character> argsFount = new HashSet<>();
-    private ListIterator<String> currentArgument;
+    private Iterator<String> currentArgument;
     private char errorArgumentId = '\0';
-    private String errorParameter = "";
+    private String errorParameter = "TILT";
     private ErrorCode errorCode = ErrorCode.OK;
     private List<String> argsList;
 
@@ -80,7 +80,7 @@ public class Args {
     }
 
     private boolean parseArguments() throws ArgsException {
-        for (currentArgument = argsList.listIterator(); currentArgument.hasNext(); ) {
+        for (currentArgument = argsList.iterator(); currentArgument.hasNext(); ) {
             String arg = currentArgument.next();
             parseArgument(arg);
         }
