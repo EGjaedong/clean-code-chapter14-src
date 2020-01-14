@@ -108,52 +108,21 @@ public class Args {
 
     private boolean setArgument(char argChar) throws ArgsException {
         ArgumentMarshaler m = marshalers.get(argChar);
+        if (m == null)
+            return false;
         try {
             if (m instanceof BooleanArgumentMarshaler)
-                setBooleanArg(m);
+                m.set(currentArgument);
             else if (m instanceof StringArgumentMarshaler)
-                setStringArg(m);
+                m.set(currentArgument);
             else if (m instanceof IntegerArgumentMarshaler)
-                setIntArg(m);
-            else
-                return false;
+                m.set(currentArgument);
         } catch (ArgsException e) {
             valid = false;
             errorArgumentId = argChar;
             throw e;
         }
         return true;
-    }
-
-    private void setStringArg(ArgumentMarshaler m) throws ArgsException {
-        try {
-            m.set(currentArgument.next());
-        } catch (NoSuchElementException e) {
-            errorCode = ErrorCode.MISSING_STRING;
-            throw new ArgsException();
-        }
-    }
-
-    private void setBooleanArg(ArgumentMarshaler m) {
-        try {
-            m.set("true");
-        } catch (ArgsException e) {
-        }
-    }
-
-    private void setIntArg(ArgumentMarshaler m) throws ArgsException {
-        String parameter = null;
-        try {
-            parameter = currentArgument.next();
-            m.set(parameter);
-        } catch (NoSuchElementException e) {
-            errorCode = ErrorCode.MISSING_INTEGER;
-            throw new ArgsException();
-        } catch (ArgsException e) {
-            errorParameter = parameter;
-            errorCode = ErrorCode.INVALID_INTEGER;
-            throw e;
-        }
     }
 
     public int cardinality() {
@@ -231,16 +200,17 @@ public class Args {
         return valid;
     }
 
-    private abstract class ArgumentMarshaler {
-        public abstract void set(String s) throws ArgsException;
+    private interface ArgumentMarshaler {
+        void set(Iterator<String> currentArgument) throws ArgsException;
 
-        public abstract Object get();
+        Object get();
     }
 
-    private class BooleanArgumentMarshaler extends ArgumentMarshaler {
+    private class BooleanArgumentMarshaler implements ArgumentMarshaler {
         private boolean booleanValue = false;
 
-        public void set(String s) {
+
+        public void set(Iterator<String> currentArgument) throws ArgsException {
             booleanValue = true;
         }
 
@@ -249,11 +219,16 @@ public class Args {
         }
     }
 
-    private class StringArgumentMarshaler extends ArgumentMarshaler {
+    private class StringArgumentMarshaler implements ArgumentMarshaler {
         private String stringValue = "";
 
-        public void set(String s) {
-            stringValue = s;
+        public void set(Iterator<String> currentArgument) throws ArgsException {
+            try {
+                stringValue = currentArgument.next();
+            }catch (NoSuchElementException e){
+                errorCode = ErrorCode.MISSING_STRING;
+                throw new ArgsException();
+            }
         }
 
         public Object get() {
@@ -261,14 +236,21 @@ public class Args {
         }
     }
 
-    private class IntegerArgumentMarshaler extends ArgumentMarshaler {
+    private class IntegerArgumentMarshaler implements ArgumentMarshaler {
         private int integerValue = 0;
 
-        public void set(String s) throws ArgsException {
+        public void set(Iterator<String> currentArgument) throws ArgsException {
+            String parameter = null;
             try {
-                integerValue = Integer.parseInt(s);
-            } catch (NumberFormatException e) {
+                parameter = currentArgument.next();
+                integerValue = Integer.parseInt(parameter);
+            }catch (NoSuchElementException e){
+                errorCode = ErrorCode.MISSING_INTEGER;
                 throw new ArgsException();
+            }catch (NumberFormatException e){
+                errorParameter = parameter;
+                errorCode = ErrorCode.INVALID_INTEGER;
+                throw e;
             }
         }
 
