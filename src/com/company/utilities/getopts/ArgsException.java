@@ -69,7 +69,7 @@ public class ArgsException extends Exception {
             case MISSING_STRING:
                 return String.format("Could not find string parameter for -%c.", errorArgumentId);
             case INVALID_INTEGER:
-                return String.format("Argument -%c expects an integer but was '%s'.", errorArgumentId, errorParameter);
+                return String.format("Argument -%c expected an integer but was '%s'.", errorArgumentId, errorParameter);
             case MISSING_INTEGER:
                 return String.format("Could not find integer parameter for -%c.", errorArgumentId);
             case INVALID_DOUBLE:
