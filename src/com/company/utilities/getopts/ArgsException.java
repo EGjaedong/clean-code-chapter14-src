@@ -7,6 +7,13 @@ public class ArgsException extends Exception {
     private String errorParameter = "TILT";
     private ErrorCode errorCode = OK;
 
+    public enum ErrorCode {
+        OK, INVALID_FORMAT, UNEXPECTED_ARGUMENT, INVALID_ARGUMENT_NAME,
+        MISSING_STRING,
+        MISSING_INTEGER, INVALID_INTEGER,
+        MISSING_DOUBLE, INVALID_DOUBLE
+    }
+
     public ArgsException() {
     }
 
@@ -71,16 +78,9 @@ public class ArgsException extends Exception {
                 return String.format("Could not find double parameter for -%c.", errorArgumentId);
             case INVALID_ARGUMENT_NAME:
                 return String.format("'%c' is not a valid argument name.", errorArgumentId);
-            case INVALID_ARGUMENT_FORMAT:
+            case INVALID_FORMAT:
                 return String.format("'%s' is not a valid argument format.", errorParameter);
         }
         return "";
-    }
-
-    public enum ErrorCode {
-        OK, INVALID_ARGUMENT_FORMAT, UNEXPECTED_ARGUMENT, INVALID_ARGUMENT_NAME,
-        MISSING_STRING,
-        MISSING_INTEGER, INVALID_INTEGER,
-        MISSING_DOUBLE, INVALID_DOUBLE
     }
 }
