@@ -97,7 +97,7 @@ class ArgsTest {
     @Test
     public void testInvalidInteger() throws Exception {
         try {
-            new Args("x#", new String[]{"-x", "Fort two"});
+            new Args("x#", new String[]{"-x", "Forty two"});
         } catch (ArgsException e) {
             assertEquals(ArgsException.ErrorCode.INVALID_INTEGER, e.getErrorCode());
             assertEquals('x', e.getErrorArgumentId());
