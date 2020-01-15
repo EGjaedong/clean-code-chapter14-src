@@ -1,10 +1,10 @@
 package com.company.utilities.getopts;
 
-import static com.company.utilities.getopts.ArgsException.ErrorCode.*;
+import static com.company.utilities.getopts.ArgsException.ErrorCode.OK;
 
 public class ArgsException extends Exception {
     private char errorArgumentId = '\0';
-    private String errorParameter = null;
+    private String errorParameter = "TILT";
     private ErrorCode errorCode = OK;
 
     public ArgsException() {
@@ -67,6 +67,8 @@ public class ArgsException extends Exception {
                 return String.format("Could not find integer parameter for -%c.", errorArgumentId);
             case INVALID_DOUBLE:
                 return String.format("Argument -%c expects an double but was '%s'.", errorArgumentId, errorParameter);
+            case MISSING_DOUBLE:
+                return String.format("Could not find double parameter for -%c.", errorArgumentId);
             case INVALID_ARGUMENT_NAME:
                 return String.format("'%c' is not a valid argument name.", errorArgumentId);
             case INVALID_ARGUMENT_FORMAT:
